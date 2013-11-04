@@ -1,17 +1,19 @@
-<?php include 'include/functions.php';
-include 'include/header.php'; ?>
-			<div id="content" class="left">
-				<ol>
-					<?php 
-						$link = new mysqli('localhost', 'root', 'necropharus', 'misctfa');
-						$link->query("SET NAMES 'utf8';SET character_set_connection=utf8;SET character_set_client=utf8;SET character_set_results=utf8;");
-						$pedido = $link->query("SELECT * FROM  `smallquotes` LIMIT 0 , 120");
-						while ($quote = $pedido->fetch_array()) {
-							echo "<li>{$quote['conteudo']}<br><em>{$quote['legenda']}</em></li>";
-						}
-						$pedido->close();
-						mysqli_close($link);
-					?>
-				</ol>
-			</div>
-<?php include 'include/footer.php'; ?>
+<?php 
+	require 'functions.php';
+	if (isset($_GET['page'])){
+		if (isset($pages[$_GET['page']])){
+			$current = $_GET['page'];
+		}
+		else {
+			$current = '404';
+		}
+	} else {
+		$current = 'main';
+	}
+
+	require 'header.php';
+
+	require $pages[$current]['url'];
+
+	require 'footer.php';
+ ?>
