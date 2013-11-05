@@ -1,4 +1,4 @@
-<?php
+<?php 
 	$conn = db_connect($dbconf);
 	$extended = false;
 	if (isset($_GET['ext'])){
@@ -7,10 +7,12 @@
 		}
 	}
 	if ($extended) {
-		$quote = get_random_quote($conn, 'largequotes');
+		$quote = get_quote_list($conn, "largequotes");
+		require 'listlarge.view.php';
 	}
 	else {
-		$quote = get_random_quote($conn, 'smallquotes');
+		$quote = get_quote_list($conn, "smallquotes");
+		require 'list.view.php';
 	}
-	require 'random.view.php';
+	
  ?>
