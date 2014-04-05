@@ -1,0 +1,6 @@
+Sistema de quotes da miscelânea da TFA
+Atualmente mantido pelo Blek
+
+Html, LESS e PHP de péssima qualidade. Não, sério, chega a ser assustador o quão mal feito e mal documentado isso tá.
+
+Por sinal, só isso que tem aqui não adianta. Se você quiser usar isso, você vai precisar de uma DB a ser usada e um arquivo config.php. Ainda não fiz o instalador nem nenhum tipo de documentação útil.
