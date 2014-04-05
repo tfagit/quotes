@@ -1,5 +1,6 @@
 <?php 
 	require 'config.php';
+	require 'pages.php';
 
 	// Cria o menu de navegação, usado no header
 	function print_nav($pagelist, $siteconf){
