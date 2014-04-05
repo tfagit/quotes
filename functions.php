@@ -97,4 +97,30 @@
 		else return false;	
 	}
 
+	function admin_mod_quote_check($conn){
+		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(isset($_POST['legenda'])){
+				if (isset($_POST['conteudolarge'])){
+					$table = 'largequotes';
+					$conteudo = $_POST['conteudolarge'];
+				} else if (isset($_POST['conteudosmall'])) {
+					$table = 'smallquotes';
+					$conteudo = $_POST['conteudosmall'];
+				}
+				else {
+					$table = false;
+				}
+				if ($table) {
+					$legenda = $_POST['legenda'];
+					$quoteid = $_POST['id'];
+					$aprovado = $_POST['rating'] == "Aprovar" ? 1 : 2;
+					if (check_quote($conteudo, $legenda)){
+						return mod_quote($conn, $table, (int)$quoteid, $conteudo, $legenda, $aprovado);
+					}
+				}
+			}
+		}
+		return false;
+	}
+
  ?>

@@ -1,6 +1,11 @@
 <div id="content">
 	<p>Edite um quote</p>
 	<ul id="modlist">
-		<?= empty($quotelist) ? "Esse quote n&atildeo existe." : $quotelist; ?>
+		<?php
+			if (empty($quote))
+				echo "Esse quote n&atildeo existe.";
+			else
+				require 'modquote.view.php';
+		?>
 	</ul>
 </div>
