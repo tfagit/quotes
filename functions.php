@@ -1,11 +1,10 @@
 <?php 
 	require 'config.php';
-	
 
 	// Cria o menu de navegação, usado no header
 	function print_nav($pagelist, $siteconf){
 		foreach ($pagelist as $key => $page) {
-			if ($key != '404') {
+			if ($key != '404' && $key != 'single' && $key != 'edit') {
 				echo '<li><a href="/'. $siteconf['location'] .'?page=' . $key . '">' . $page['nav'] . '</a></li>';
 			}
 		}
@@ -13,16 +12,17 @@
 	}
 
 	// DATABASE
-	// (usando DBO, fuck yeah)
+	// (usando PDO, fuck yeah)
 	function db_connect($dbconf){
 		try {
 			$conn = new PDO('mysql:host=' . $dbconf["host"] . ';dbname=' . $dbconf["db"],
 							$dbconf['username'],
 							$dbconf['password']);
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 			return $conn;
 		} catch (Exception $e) {
-			echo $e;
+			//echo $e;
+			echo "O MySQLd t&aacute; derpando de novo. Fale com o Blek.";
 			return false;
 		}
 	}
@@ -31,16 +31,49 @@
 		//$query = $conn->prepare("SELECT conteudo, legenda FROM :table WHERE id >= ( SELECT FLOOR ((MAX(id) + 1) * RAND()) FROM :table ) ORDER BY id LIMIT 1");
 		//$query->bindParam('table', $table, PDO::PARAM_STR);
 		//$query->execute();
-		$query = $conn->query("SELECT conteudo, legenda FROM `" . $table . "` WHERE id >= (SELECT FLOOR((MAX(id) + 1) * RAND()) FROM `" . $table . "`) ORDER BY id LIMIT 1");
+		$query = $conn->query("SELECT id, conteudo, legenda FROM `" . $table . "` WHERE aprovado = 1 AND id >= (SELECT FLOOR((MAX(id) + 1) * RAND()) FROM `" . $table . "`) ORDER BY id LIMIT 1;");
 		$result = $query->fetch(PDO::FETCH_ASSOC);
 		return $result;
 	}
 
+	function get_single_quote($conn, $table, $id) {
+		$content = "SELECT id, conteudo, legenda, aprovado FROM `" . $table . "` WHERE id = :id ORDER BY id LIMIT 1;";
+		$query = $conn->prepare($content);
+		$query->bindParam("id", $id, PDO::PARAM_INT);
+		$query->execute();
+		$result = $query->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
+	}
+
 	function get_quote_list($conn, $table) {
-		$query = $conn->prepare("SELECT conteudo, legenda FROM " . $table . " LIMIT 100;");
+		$query = $conn->prepare("SELECT id, conteudo, legenda FROM " . $table . " WHERE aprovado = 1;");
 		$query->execute();
 		$result = $query->fetchAll(PDO::FETCH_ASSOC);
 		return $result;
+	}
+
+	function get_unapproved_quotes($conn, $table) {
+		$query = $conn->prepare("SELECT id, conteudo, legenda FROM " . $table . " WHERE aprovado = 0;");
+		$query->execute();
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	function mod_quote($conn, $table, $id, $conteudo, $legenda, $aprovado) {
+		try {
+			$content = "UPDATE " . $table . " SET conteudo = :conteudo, legenda = :legenda, aprovado = :aprovado WHERE id = :id;";
+			$query = $conn->prepare($content);
+			$query->bindParam("conteudo", $conteudo, PDO::PARAM_STR);
+			$query->bindParam("legenda", $legenda, PDO::PARAM_STR);
+			$query->bindParam("aprovado", $aprovado, PDO::PARAM_INT);
+			$query->bindParam("id", $id, PDO::PARAM_INT);
+			$query->execute();
+			return true;
+		} catch (Exception $e) {
+			echo $content;
+			var_dump($e);
+			return false;
+		}
 	}
 
 	function envio_quote($conn, $conteudo, $legenda, $tabela) {
@@ -60,7 +93,7 @@
 		$conlen = strlen($conteudo);
 		$leglen = strlen($legenda);
 		if ($conlen >= 4 && $conlen <= 4096 && $leglen >= 4 && $leglen <= 256) return true;
-		else return false;
+		else return false;	
 	}
 
  ?>

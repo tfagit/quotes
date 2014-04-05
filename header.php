@@ -1,4 +1,4 @@
 <?php 
-	require 'header.view.php';
+	require 'views/header.view.php';
 	
  ?>

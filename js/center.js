@@ -7,7 +7,7 @@ var fullcenter = function(){
 }
 
 $(window).resize(function(){
-	fullcenter();
+	//fullcenter();
 });
 
 var toggleform = function(){
@@ -26,8 +26,8 @@ var toggleform = function(){
 $(document).ready(function() {
 	$("input#toggleform").click(function(){
 		toggleform();
-		fullcenter();
+		//fullcenter();
 	});
-	fullcenter();
+	//fullcenter();
 });
 

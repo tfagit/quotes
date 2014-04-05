@@ -1,3 +1,3 @@
 <?php 
-	require 'main.view.php';
+	require 'views/main.view.php';
  ?>
