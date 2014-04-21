@@ -1,5 +1,5 @@
 <li>
-	<form action="?page=admin<?= $extended ? "&ext=1" : '' ?> method="post">
+	<form action="?page=admin<?= $extended ? "&ext=1" : '' ?>" method="post">
 		ID: <?=$quote['id']?><br>
 		Conte&uacute;do:<br>
 		<?= $extended ? 

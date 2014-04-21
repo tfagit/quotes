@@ -1,5 +1,5 @@
 <div id="content">
-	<p>Edite um quote</p>
+	<p><?= $_SERVER['REQUEST_METHOD'] == 'POST' && isset($alert) ? $alert : 'Edite um quote'?></p>
 	<ul id="modlist">
 		<?php
 			if (empty($quote))

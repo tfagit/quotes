@@ -1,5 +1,5 @@
 <div id="content">
-	<p>Avalie os quotes pendentes</p>
+	<p><?= $_SERVER['REQUEST_METHOD'] == 'POST' && isset($alert) ? $alert : 'Avalie os quotes pendentes'?></p>
 	<ul id="modlist">
 		<?php 
 			if(!count($quotes))
